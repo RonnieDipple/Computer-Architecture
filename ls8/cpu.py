@@ -121,6 +121,3 @@ class CPU:
 
             else:
                 print("Invalid Command")
-
-
-
