@@ -6,6 +6,8 @@
 
 
 #Learn base 16 aka hex or hexidecimal
+
+#Binary
 # 2** 0 = 1
 # 2** 1 = 2
 # 2** 2 = 4

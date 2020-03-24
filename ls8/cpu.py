@@ -1,13 +1,25 @@
 """CPU functionality."""
 
 import sys
+# Day 1: Get print8.ls8 running
+#
+# Inventory what is here
+# Implement the CPU constructor
+# Add RAM functions ram_read() and ram_write()
+# Implement the core of run()
+# Implement the HLT instruction handler
+# Add the LDI instruction
+# Add the PRN instruction
 
 class CPU:
     """Main CPU class."""
 
     def __init__(self):
         """Construct a new CPU."""
-        pass
+        self.ram = [0] * 256 # 256 bytes
+        self.pc = 0
+        self.reg = [0]* 8 # 8 Registers
+
 
     def load(self):
         """Load a program into memory."""
@@ -61,5 +73,24 @@ class CPU:
         print()
 
     def run(self):
-        """Run the CPU."""
-        pass
+        # Binary
+        # 2** 0 = 1
+        # 2** 1 = 2
+        # 2** 2 = 4
+        # 2** 3 = 8
+        # 2** 4 = 16
+        # 2** 5 = 32
+        # 2** 6 = 64
+        # 2** 7 = 128
+        # 2** 8 = 256
+        # 2** 9 = 512
+        # 2** 10 = 1024
+        flag_running = True
+        HLT = 0b10000010  # 0b represents binary, 130
+        LDI = 0b00000001  # 1
+        PRN = 0b01000111  # 71
+
+
+        while flag_running:
+
+
