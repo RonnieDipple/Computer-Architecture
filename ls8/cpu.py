@@ -72,6 +72,15 @@ class CPU:
 
         print()
 
+    # MAR Address, MDR data
+    def ram_read(self, MAR):
+        return self.ram[MAR]
+
+
+    def ram_write(self,MAR, MDR):
+        self.ram[MAR] = MDR
+
+
     def run(self):
         # Binary
         # 2** 0 = 1
