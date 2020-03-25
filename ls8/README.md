@@ -153,9 +153,10 @@ value.
 This is a very similar process to adding `LDI`, but the handler is simpler. See
 the LS-8 spec.
 
-*At this point, you should be able to run the program and have it print `8` to
+*DAY 1 complete At this point, you should be able to run the program and have it print `8` to
 the console!*
 
+############################## DAY 2 ########################################3
 ## Step 7: Un-hardcode the machine code
 
 In `cpu.py`, the LS-8 programs you've been running so far have been hardcoded
@@ -289,7 +290,7 @@ class Foo:
 c = Foo()
 c.run()
 ```
-
+########################################### DAY 3 ###################################################
 ## Step 10: Implement System Stack
 
 All CPUs manage a _stack_ that can be used to store information temporarily.
@@ -311,7 +312,7 @@ If you run `python3 ls8.py examples/stack.ls8` you should see the output:
 4
 1
 ```
-
+#################################################################### DAY 4 ########################################
 ## Step 11: Implement Subroutine Calls
 
 Back in the old days, functions were called _subroutines_. In machine code,

@@ -16,38 +16,82 @@ class CPU:
 
     def __init__(self):
         """Construct a new CPU."""
-        self.ram = [0] * 256 # 256 bytes
-        self.pc = 0
+        # self.ram = [0] * 256 # 256 bytes
+        self.ram = {}
+        self.pc = -1
         self.reg = [0]* 8 # 8 Registers
 
+    # Increases the Program Counter
+    @property
+    def counter(self):
+        self.pc += 1
+        return self.pc
 
-    def load(self):
+
+    def load(self, program):
         """Load a program into memory."""
 
-        address = 0
+        # address = 0
 
-        # For now, we've just hardcoded a program:
+        # This is the hardcoded version of program:
 
-        program = [
-            # From print8.ls8
-            0b10000010, # LDI R0,8
-            0b00000000,
-            0b00001000,
-            0b01000111, # PRN R0
-            0b00000000,
-            0b00000001, # HLT
-        ]
+        # program = [
+        #     # From print8.ls8
+        #     0b10000010, # LDI R0,8
+        #     0b00000000,
+        #     0b00001000,
+        #     0b01000111, # PRN R0
+        #     0b00000000,
+        #     0b00000001, # HLT
+        # ]
 
-        for instruction in program:
-            self.ram[address] = instruction
-            address += 1
+        # for instruction in program:
+        #     self.ram[address] = instruction
+        #     address += 1
 
+        with open(program, 'r') as f:
+            for line in f:
+
+                # Ignore comments
+                line = line.split("#")[0]
+
+
+                if line:
+                    #Binary conversertion from String to an int with base 2
+                    binary = int(line, 2)
+                    self.ram_load(binary)
+
+    # ```python
+    # x = int("1010101", 2)  # Convert binary string to integer
+    # ```
+
+    # `ram_read()` should accept the address to read and return the value stored there.
+    # MAR Address, MDR data
+    def ram_read(self, MAR):
+        return self.ram[MAR]
+
+    # `raw_write()`should accept a value to write, and the address to write it to.
+    def ram_write(self, MDR, MAR):
+        self.ram[MAR] = MDR
+
+    # loads ram based on value given
+    def ram_load(self, value):
+        address = len(self.ram.values())
+        self.ram[address] = value
+
+    # Register read given register
+    def reg_read(self, register):
+        return self.reg[register]
+
+    # Register write given register and value
+    def reg_write(self, register, value):
+        self.reg[register] = value
 
     def alu(self, op, reg_a, reg_b):
         """ALU operations."""
 
-        if op == "ADD":
-            self.reg[reg_a] += self.reg[reg_b]
+        if op == "MUL":
+            self.reg_write(reg_a, self.reg[reg_a] * self.reg[reg_b])
         #elif op == "SUB": etc
         else:
             raise Exception("Unsupported ALU operation")
@@ -72,14 +116,7 @@ class CPU:
 
         print()
 
-    # `ram_read()` should accept the address to read and return the value stored there.
-    # MAR Address, MDR data
-    def ram_read(self, MAR):
-        return self.ram[MAR]
 
-    # `raw_write()`should accept a value to write, and the address to write it to.
-    def ram_write(self, MDR, MAR):
-        self.ram[MAR] = MDR
 
     # This is the workhorse function of the entire processor.It's the most difficult part to write.
     def run(self):
@@ -99,28 +136,33 @@ class CPU:
         HLT = 0b00000001  # 1
         LDI = 0b10000010  # 0b represents binary, 130
         PRN = 0b01000111  # 71
+        MUL = 0b10100010  # 162
 
         while flag_running:
-            # IR means Instruction Register
-            IR = self.ram_read(self.pc)
-            op_a = self.ram_read(self.pc + 1)
-            op_b = self.ram_read(self.pc + 2)
+            IR = self.ram_read(self.counter)
+            # # IR means Instruction Register
+            # IR = self.ram_read(self.pc)
+            # op_a = self.ram_read(self.pc + 1)
+            # op_b = self.ram_read(self.pc + 2)
 
             # LDI: load "immediate", store a value in a register, or "set this register to this value".
             if IR == LDI:
-                self.reg[op_a] = op_b
-                self.pc += 3
+                reg_a = self.ram_read(self.counter)
+                value = self.ram_read(self.counter)
+                self.reg_write(reg_a, value)
             # PRN: a pseudo-instruction that prints the numeric value stored in a register.
             elif IR == PRN:
-                print(self.reg[self.ram_read(self.pc + 1)])
-                self.pc += 2
-
+                reg_a = self.ram_read(self.counter)
+                value = self.reg_read(reg_a)
+                print(value)
+            #Multiply
+            elif IR == MUL:
+                reg_a = self.ram_read(self.counter)
+                reg_b = self.ram_read(self.counter)
+                self.alu("MUL", reg_a, reg_b)
             # HLT: halt the CPU and exit the emulator.
             elif IR == HLT:
                 flag_running = False
 
             else:
                 print("Invalid Command")
-
-
-

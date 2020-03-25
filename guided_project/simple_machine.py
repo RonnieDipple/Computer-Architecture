@@ -9,27 +9,63 @@ PRINT_REGISTER = 5 # Print a value from a register
 ADD = 6 # regA += regB This add will work the same as the ls 8
 
 # This represents RAM
-memory = [
-    PRINT_BEEJ,#Op code
-    SAVE,
-    65,
-    2,
-    SAVE,
-    20,
-    3,
-    ADD,
-    2,
-    3,
-    PRINT_REGISTER,
-    2,
-    HALT
-]
 
-register = [0] * 8 # Registers are ulter fast but limited in size and quantity can only store 1 what is called a WORD
+memory = [None] * 256
+
+# Hardcoded version of above
+# memory = [
+#     PRINT_BEEJ,#Op code
+#     SAVE,
+#     65,
+#     2,
+#     SAVE,
+#     20,
+#     3,
+#     ADD,
+#     2,
+#     3,
+#     PRINT_REGISTER,
+#     2,
+#     HALT
+# ]
+
+register = [0] * 8 # Registers are ultra fast but limited in size and quantity can only store 1 what is called a WORD
 
 # program_counter represents a register that points to a location in memory
 program_counter = 0
 flag_running = True
+
+
+def load_memory(filename):
+    address = 0
+    try:
+     with open(filename) as f:
+         for line in f:
+
+             # Ignore comments
+             comment_split = line.split("#")
+
+             # Strip out whitespace
+             num = comment_split[0].strip()
+
+             # Ignore blank lines
+             if num == '':
+                 continue
+
+             val = int(num)
+             memory[address] = val
+             address += 1
+
+    except FileNotFoundError:
+        print("File not found")
+        sys.exit(2)
+
+if len(sys.argv) != 2:
+    print("usage: simple_machine.py filename")
+    sys.exit(1)
+
+filename = sys.argv[1]
+load_memory(filename)
 
 # While is the processor
 while flag_running:
