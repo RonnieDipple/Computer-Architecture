@@ -29,7 +29,7 @@ memory = [None] * 256
 #     HALT
 # ]
 
-register = [0] * 8 # Registers are ulter fast but limited in size and quantity can only store 1 what is called a WORD
+register = [0] * 8 # Registers are ultra fast but limited in size and quantity can only store 1 what is called a WORD
 
 # program_counter represents a register that points to a location in memory
 program_counter = 0
