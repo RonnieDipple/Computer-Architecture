@@ -7,6 +7,8 @@ PRINT_NUM = 3
 SAVE = 4 #SAVE a value to a register
 PRINT_REGISTER = 5 # Print a value from a register
 ADD = 6 # regA += regB This add will work the same as the ls 8
+PUSH = 7
+POP = 8
 
 # This represents RAM
 
@@ -34,6 +36,8 @@ register = [0] * 8 # Registers are ultra fast but limited in size and quantity c
 # program_counter represents a register that points to a location in memory
 program_counter = 0
 flag_running = True
+
+SP = 7
 
 
 def load_memory(filename):
@@ -97,6 +101,24 @@ while flag_running:
         reg_b = memory[program_counter + 2]
         register[reg_a] += register[reg_b]
         program_counter += 3
+
+    elif command == PUSH:
+        reg = memory[program_counter + 1]
+        val = register[reg]
+        # Decrement the stack pointer
+        register[SP] -= 1
+        # Copy the value in the given register to the memory_address pointed to by the sp aka stack pointer
+        memory[register[SP]] = val
+        program_counter += 2
+
+    elif command == POP:
+        reg = memory[program_counter + 1]
+        val = memory[register[SP]]
+        # Copy the value from the memory_address pointed to by the SP to the given register
+        register[reg] = val
+        # Increment SP
+        register[SP] += 1
+        program_counter += 2
 
 
     else:

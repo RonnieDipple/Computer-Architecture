@@ -140,7 +140,7 @@ def pass1(inputfile, sym, code):
     # Source line number
     line_num = 0
 
-    # Current code address (for labels)
+    # Current code memory_address (for labels)
     addr = 0
 
     def get_reg(op, fatal=True):
@@ -337,7 +337,7 @@ def pass1(inputfile, sym, code):
 
             # print(label, opcode, op_a, op_b)  # debug
 
-            # Track label address
+            # Track label memory_address
             if label is not None:
                 sym[label] = addr
                 # print(f"Label {label}: {addr}")  # debug

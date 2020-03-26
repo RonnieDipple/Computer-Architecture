@@ -99,7 +99,7 @@ const typeF = {
 // Set up the machine code output
 const code = [];
 
-// Current code address (for labels)
+// Current code memory_address (for labels)
 let addr = 0;
 
 // Source line number
@@ -151,7 +151,7 @@ rl.on('line', (input) => {
 
     //console.log(label, opcode, opA, opB);
 
-    // Track label address
+    // Track label memory_address
     if (label) {
       sym[label] = addr;
       //console.log("Label " + label + ": " + addr);

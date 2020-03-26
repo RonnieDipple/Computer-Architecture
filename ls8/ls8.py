@@ -7,5 +7,5 @@ from cpu import *
 # program = sys.argv[1]
 cpu = CPU()
 
-cpu.load("examples/mult.ls8") #removed program for testing
+cpu.load("examples/stack.ls8") #removed program for testing, examples/mult.ls8 for testing
 cpu.run()
