@@ -9,10 +9,13 @@ PRINT_REGISTER = 5 # Print a value from a register
 ADD = 6 # regA += regB This add will work the same as the ls 8
 PUSH = 7
 POP = 8
+CALL = 9
+RET = 10
+
 
 # This represents RAM
 
-memory = [None] * 256
+memory = [0] * 256
 
 # Hardcoded version of above
 # memory = [
@@ -74,6 +77,10 @@ load_memory(filename)
 # While is the processor
 while flag_running:
     command = memory[program_counter]
+    # print(memory)
+    # print(register)
+    # print("_____")
+    print(program_counter)
 
     if command == PRINT_BEEJ:
         print("Beej!")
@@ -119,6 +126,27 @@ while flag_running:
         # Increment SP
         register[SP] += 1
         program_counter += 2
+
+
+    elif command == CALL:
+        # The address of the instruction directly after CALL is pushed onto the stack.
+        # This allows us to return to where we left off when the subroutine finishes executing.
+        # the register[SP] -= 1 and memory[register[SP]] = program_counter + 2 are very similar to the push above
+        register[SP] -= 1
+        memory[register[SP]] = program_counter + 2
+        # The PC is set to the address stored in the given register.
+        # We jump to that location in RAM and execute the first instruction in the subroutine.
+        # The PC can move forward or backwards from its current location
+        reg = memory[program_counter + 1]
+        program_counter = register[reg]
+
+    elif command == RET:
+        # Return from subroutine
+        # Pop the value
+        program_counter = memory[register[SP]]
+        register[SP] += 1
+
+
 
 
     else:
